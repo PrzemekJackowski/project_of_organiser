@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'Organizer.wsgi.application'
 
 DATABASES = {
     'default': {
-        'NAME': organizer,
+        'NAME': 'organizer',
         'ENGINE': 'django.db.backends.sqlite3',
         'USER': 'postgres',
         'PASSWORD': 'coderslab',
