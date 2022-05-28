@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Family(models.Model):
-    name = models.CharField(unique=True, max_length=64)
+    family_name = models.CharField(unique=True, max_length=64, default="Family_name")
     description = models.TextField()
     family_code = models.CharField(unique=True, max_length=8)
 
@@ -15,13 +15,13 @@ class Family(models.Model):
 
 
 class UserInf(models.Model):
-    family = models.ForeignKey(Family, on_delete=models.CASCADE())
+    family = models.ForeignKey(Family, on_delete=models.CASCADE)
     initial = models.CharField(max_length=1)
-    color = models.CharField()
+    color = models.CharField(max_length=32)
 
 
 class Categories(models.Model):
-    name = models.CharField(unique=True, max_length=64)
+    category_name = models.CharField(unique=True, max_length=64, default="Category's name")
     description = models.TextField()
 
     @property
@@ -33,8 +33,8 @@ class Categories(models.Model):
 
 
 class Activities(models.Model):
-    name = models.CharField(unique=True, max_length=64)
-    category = models.ForeignKey(Categories, on_delete=models.CASCADE())
+    activity_name = models.CharField(unique=True, max_length=64, default="Activity's name")
+    category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     description = models.TextField()
 
     @property
@@ -46,7 +46,7 @@ class Activities(models.Model):
 
 
 class Plans(models.Model):
-    activity = models.ForeignKey(Activities, on_delete=models.CASCADE())
+    activity = models.ForeignKey(Activities, on_delete=models.CASCADE)
     user = models.IntegerField()
     day = models.DateTimeField()
     duration = models.TimeField()

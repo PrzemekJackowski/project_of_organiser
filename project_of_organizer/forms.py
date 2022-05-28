@@ -14,8 +14,8 @@ for activity in activities:
 
 
 class FamilyForm(forms.Form):
-    name = forms.CharField(label="Family's name", max_length=64)
-    description = forms.CharField(labe="Description")
+    family_name = forms.CharField(label="Family's name", max_length=64)
+    description = forms.CharField(label="Description")
 
 
 class UserForm(forms.Form):
@@ -54,12 +54,12 @@ class UserForm(forms.Form):
 
 
 class CategoryForm(forms.Form):
-    name = forms.CharField(label="Category's name")
+    category_name = forms.CharField(label="Category's name")
     description = forms.CharField(label="Description")
 
 
 class ActivityForm(forms.Form):
-    name = forms.CharField(label="Activity's name")
+    activity_name = forms.CharField(label="Activity's name")
     category = forms.ChoiceField(choices=CATEGORIES)
     description = forms.CharField(label="Description")
 
