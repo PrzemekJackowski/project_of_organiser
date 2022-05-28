@@ -1,33 +1,5 @@
 from django.db import models
 
-COLORS = (
-    (1, "aqua"),
-    (2, "blue"),
-    (3, "brown"),
-    (4, "cyan"),
-    (5, "crimson"),
-    (6, "darkgreen"),
-    (7, "deeppink"),
-    (8, "forestgreen"),
-    (9, "fuchsia"),
-    (10, "gold"),
-    (11, "green"),
-    (12, "indigo"),
-    (13, "lavender"),
-    (14, "lightcoral"),
-    (15, "lime"),
-    (16, "magenta"),
-    (17, "maroon"),
-    (18, "olive"),
-    (19, "orange"),
-    (20, "purple"),
-    (21, "red"),
-    (22, "salmon"),
-    (23, "silver"),
-    (24, "violet"),
-    (25, "yellow"),
-)
-
 
 class Family(models.Model):
     name = models.CharField(unique=True, max_length=64)
@@ -45,7 +17,7 @@ class Family(models.Model):
 class UserInf(models.Model):
     family = models.ForeignKey(Family, on_delete=models.CASCADE())
     initial = models.CharField(max_length=1)
-    color = models.FloatField(choices=COLORS)
+    color = models.CharField()
 
 
 class Categories(models.Model):
