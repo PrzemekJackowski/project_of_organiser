@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -15,7 +16,8 @@ class Family(models.Model):
 
 
 class UserInf(models.Model):
-    family = models.ForeignKey(Family, on_delete=models.CASCADE)
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    families = models.ManyToManyField(Family)
     initial = models.CharField(max_length=1)
     color = models.CharField(max_length=32)
 
