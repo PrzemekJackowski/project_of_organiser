@@ -51,3 +51,8 @@ class Plans(models.Model):
     user = models.IntegerField()
     day = models.DateTimeField()
     duration = models.TimeField()
+
+
+class UserFamily(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    family = models.ForeignKey(Family, on_delete=models.CASCADE)

@@ -58,6 +58,10 @@ class LogInForm(forms.Form):
     password = forms.CharField(label="Insert password", widget=forms.PasswordInput)
 
 
+class AddToFamilyForm(forms.Form):
+    family_code = forms.CharField(label="Family code")
+
+
 class CategoryForm(forms.Form):
     category_name = forms.CharField(label="Category's name")
     description = forms.CharField(label="Description")

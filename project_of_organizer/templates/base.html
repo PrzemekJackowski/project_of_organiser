@@ -38,14 +38,14 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/recipe/add/">
-                                <span>Dodaj przepis</span>
+                            <a class="nav-link" href="/join_family/">
+                                <span>Join to family</span>
                                 <i class="fas fa-angle-right"></i>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/plan/add/">
-                                <span>Dodaj plan</span>
+                            <a class="nav-link" href="/create_category/">
+                                <span>Create category</span>
                                 <i class="fas fa-angle-right"></i>
                             </a>
                         </li>
@@ -60,6 +60,12 @@
 {% endblock %}
 </body>
 <footer>
+    <p>You are member of:</p>
+<ul>
+    {%  for added_family in added_families %}
+    <li>{{ added_family.family.family_name }}</li>
+    {% endfor %}
+</ul>
     <p>You are using an application, created by Przemysław Jackowski.</p>
 </footer>
 </html>
