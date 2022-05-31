@@ -1,0 +1,25 @@
+{% load static %}
+
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title>Organizer app</title>
+</head>
+<body>
+<div style="text-align: center"><img src="{% static '/logo.png'%}"></div>
+<div style="text-align: right">    {% if user.is_anonymous %}
+        <p>You are not logged.</p>
+        <p><a href="{% url 'login' %}">Login</a></p>
+    {% else %}
+        <p>You are logged as: {{ user.username }}</p>
+        <p><a href="{% url 'logout' %}">Logout</a></p>
+    {% endif %}</div>
+<h1>Organizer application</h1>
+{% block content %}
+{% endblock %}
+</body>
+<footer>
+    <p>You are using an application, created by Przemysław Jackowski.</p>
+</footer>
+</html>

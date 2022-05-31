@@ -47,10 +47,15 @@ class UserForm(forms.Form):
         ("yellow", "yellow"),
     )
     username = forms.CharField(label="Username")
-    password = forms.PasswordInput()
+    password = forms.CharField(label="Insert password", widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Reinsert password", widget=forms.PasswordInput)
     email = forms.EmailField(label="E-mail")
-    family = forms.CharField(label="Family's code")
     color = forms.ChoiceField(choices=COLORS)
+
+
+class LogInForm(forms.Form):
+    username = forms.CharField(label="Username")
+    password = forms.CharField(label="Insert password", widget=forms.PasswordInput)
 
 
 class CategoryForm(forms.Form):
