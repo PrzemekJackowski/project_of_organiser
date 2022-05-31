@@ -6,11 +6,11 @@ from project_of_organizer.models import Categories, Activities
 categories = Categories.objects.all()
 CATEGORIES = []
 for category in categories:
-    CATEGORIES.append((category.id, category))
+    CATEGORIES.append((category.id, category.category_name))
 activities = Activities.objects.all()
 ACTIVITIES = []
 for activity in activities:
-    ACTIVITIES.append((activity.id, activity))
+    ACTIVITIES.append((activity.id, activity.activity_name))
 
 
 class FamilyForm(forms.Form):

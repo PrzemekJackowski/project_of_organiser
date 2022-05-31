@@ -5,7 +5,6 @@
 <head>
     <meta charset="utf-8">
     <title>Organizer app</title>
-    <link rel="stylesheet" href="{% static "css/style.css" %}">
 </head>
 <body>
 <div style="text-align: center"><img src="{% static '/logo.png'%}"></div>
@@ -16,46 +15,39 @@
         <p>You are logged as: {{ user.username }}</p>
         <p><a href="{% url 'logout' %}">Logout</a></p>
     {% endif %}</div>
-<section class="dashboard-section">
-        <div class="row dashboard-nowrap">
-                <ul class="nav flex-column long-bg">
+        <div>
+                <ul>
                         <li class="nav-item">
                             <a class="nav-link" href="/">
                                 <span>Home</span>
-                                <i class="fas fa-angle-right"></i>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/sign_in/">
                                 <span>Sign in</span>
-                                <i class="fas fa-angle-right"></i>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/create_family/">
                                 <span>Create family</span>
-                                <i class="fas fa-angle-right"></i>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/join_family/">
                                 <span>Join to family</span>
-                                <i class="fas fa-angle-right"></i>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/create_category/">
                                 <span>Create category</span>
-                                <i class="fas fa-angle-right"></i>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/plan/add-recipe/">
-                                <span>Dodaj przepis do planu</span>
-                                <i class="fas fa-angle-right"></i>
+                            <a class="nav-link" href="/create_activity/">
+                                <span>Create activity</span>
                             </a>
                         </li>
-                </ul></div></section>
+                </ul></div>
 {% block content %}
 {% endblock %}
 </body>

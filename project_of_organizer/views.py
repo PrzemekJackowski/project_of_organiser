@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import UserForm, LogInForm, FamilyForm, AddToFamilyForm, CategoryForm
-from .models import UserInf, Family, UserFamily, Categories
+from .forms import UserForm, LogInForm, FamilyForm, AddToFamilyForm, CategoryForm, ActivityForm
+from .models import UserInf, Family, UserFamily, Categories, Activities
 
 
 class CreateUserView(View):
@@ -135,3 +135,28 @@ class CategoriesListView(View):
         categories = Categories.objects.all()
         added_families = UserFamily.objects.filter(user=request.user)
         return render(request, "categories_list.html", {"categories": categories, "added_families": added_families})
+
+
+class AddActivityView(LoginRequiredMixin, View):
+    def get(self, request):
+        added_families = UserFamily.objects.filter(user=request.user)
+        form = ActivityForm()
+        return render(request, "create_activity.html", {"form": form, "added_families": added_families})
+
+    def post(self, request):
+        added_families = UserFamily.objects.filter(user=request.user)
+        form = ActivityForm(request.POST)
+        if form.is_valid():
+            activity_name = form.cleaned_data['activity_name']
+            category = Categories.objects.get(id=form.cleaned_data['category'])
+            description = form.cleaned_data['description']
+            Activities.objects.create(activity_name=activity_name, category=category, description=description)
+            return HttpResponse(f'You have been created activity {activity_name}')
+        return render(request, "create_activity.html", {"form": form, "added_families": added_families})
+
+
+class ActivitiesListView(View):
+    def get(self, request):
+        activities = Activities.objects.all()
+        added_families = UserFamily.objects.filter(user=request.user)
+        return render(request, "activities_list.html", {"activities": activities, "added_families": added_families})

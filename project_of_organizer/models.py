@@ -25,25 +25,11 @@ class Categories(models.Model):
     category_name = models.CharField(unique=True, max_length=64, default="Category's name")
     description = models.TextField()
 
-    @property
-    def name(self):
-        return "{}".format(self.name)
-
-    def __str__(self):
-        return self.name
-
 
 class Activities(models.Model):
     activity_name = models.CharField(unique=True, max_length=64, default="Activity's name")
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     description = models.TextField()
-
-    @property
-    def name(self):
-        return "{}".format(self.name)
-
-    def __str__(self):
-        return self.name
 
 
 class Plans(models.Model):

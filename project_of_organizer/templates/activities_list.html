@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Activities</h2>
+    <ol>
+{% for activity in activities %}
+    <li>{{ activity.activity_name }}, {{ activity.description }} - category: {{ activity.category.category_name }}</li>
+    {%  endfor %}
+</ol>
+{% endblock %}
