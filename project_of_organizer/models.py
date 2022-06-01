@@ -42,3 +42,15 @@ class Plans(models.Model):
 class UserFamily(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     family = models.ForeignKey(Family, on_delete=models.CASCADE)
+
+
+class ItemForPlan(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    plan = models.ForeignKey(Plans, on_delete=models.CASCADE)
+    item = models.TextField()
+
+
+class InfoAboutPlan(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    plan = models.ForeignKey(Plans, on_delete=models.CASCADE)
+    info = models.TextField()
