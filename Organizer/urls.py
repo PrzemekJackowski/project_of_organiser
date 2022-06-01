@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 
-from project_of_organizer.views import CreateUserView, LogInView, LogOutView, CreateFamilyView, FamiliesListView, AddToFamilyView, AddCategoryView, CategoriesListView, AddActivityView, ActivitiesListView
+from project_of_organizer.views import CreateUserView, LogInView, LogOutView, CreateFamilyView, FamiliesListView, AddToFamilyView, AddCategoryView, CategoriesListView, AddActivityView, ActivitiesListView, AddPlanView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -15,4 +15,5 @@ urlpatterns = [
     path('categories/', CategoriesListView.as_view(), name="categories"),
     path('create_activity/', AddActivityView.as_view(), name="create_activity"),
     path('activities/', ActivitiesListView.as_view(), name="activities"),
+    path('create_plan/', AddPlanView.as_view(), name="create_plan"),
 ]

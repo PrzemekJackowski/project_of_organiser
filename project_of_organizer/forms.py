@@ -77,3 +77,5 @@ class PlanForm(forms.Form):
     activity = forms.ChoiceField(choices=ACTIVITIES)
     day = forms.DateTimeField(label="Start of activity")
     duration = forms.TimeField(label="Duration of activity")
+    item = forms.CharField(label="Item needed for that")
+    info = forms.CharField(label="Extra info about")

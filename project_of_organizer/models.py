@@ -47,10 +47,10 @@ class UserFamily(models.Model):
 class ItemForPlan(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     plan = models.ForeignKey(Plans, on_delete=models.CASCADE)
-    item = models.TextField()
+    item = models.TextField(null=True)
 
 
 class InfoAboutPlan(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     plan = models.ForeignKey(Plans, on_delete=models.CASCADE)
-    info = models.TextField()
+    info = models.TextField(null=True)

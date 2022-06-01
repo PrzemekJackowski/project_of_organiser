@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import UserForm, LogInForm, FamilyForm, AddToFamilyForm, CategoryForm, ActivityForm
+from .forms import UserForm, LogInForm, FamilyForm, AddToFamilyForm, CategoryForm, ActivityForm, PlanForm
 from .models import UserInf, Family, UserFamily, Categories, Activities
 
 
@@ -160,3 +160,17 @@ class ActivitiesListView(View):
         activities = Activities.objects.all()
         added_families = UserFamily.objects.filter(user=request.user)
         return render(request, "activities_list.html", {"activities": activities, "added_families": added_families})
+
+
+class AddPlanView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = PlanForm()
+        added_families = UserFamily.objects.filter(user=request.user)
+        return render(request, "create_plan.html", {"form": form, "added_families": added_families})
+
+    def post(self, request):
+        form = PlanForm(request.POST)
+        added_families = UserFamily.objects.filter(user=request.user)
+        if form.is_valid():
+            user = request.user
+
