@@ -1,16 +1,7 @@
 from django import forms
 
 from project_of_organizer.models import Categories, Activities
-
-
-categories = Categories.objects.all()
-CATEGORIES = []
-for category in categories:
-    CATEGORIES.append((category.id, category.category_name))
-activities = Activities.objects.all()
-ACTIVITIES = []
-for activity in activities:
-    ACTIVITIES.append((activity.id, activity.activity_name))
+from .widget import DatePickerInput, TimePickerInput
 
 
 class FamilyForm(forms.Form):
@@ -68,14 +59,23 @@ class CategoryForm(forms.Form):
 
 
 class ActivityForm(forms.Form):
+    categories = Categories.objects.all()
+    CATEGORIES = []
+    for category in categories:
+        CATEGORIES.append((category.id, category.category_name))
     activity_name = forms.CharField(label="Activity's name")
     category = forms.ChoiceField(choices=CATEGORIES)
     description = forms.CharField(label="Description")
 
 
 class PlanForm(forms.Form):
+    activities = Activities.objects.all()
+    ACTIVITIES = []
+    for activity in activities:
+        ACTIVITIES.append((activity.id, activity.activity_name))
     activity = forms.ChoiceField(choices=ACTIVITIES)
-    day = forms.DateTimeField(label="Start of activity")
-    duration = forms.TimeField(label="Duration of activity")
-    item = forms.CharField(label="Item needed for that")
-    info = forms.CharField(label="Extra info about")
+    day = forms.DateField(label="Start of activity", widget=DatePickerInput)
+    start = forms.TimeField(label="Start of activity", widget=TimePickerInput)
+    finish = forms.TimeField(label="Finish of activity", widget=TimePickerInput)
+    item = forms.CharField(label="Item needed for that", required=False)
+    info = forms.CharField(label="Extra info about", required=False)

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Plans in {{ family.family_name }} for {{ user.username }}</h2>
+    <ol>
+{% for plan in plans %}
+    <li>{{ plan.activity.activity_name }}, {{ plan.day }}: {{ plan.start }} - {{ plan.finish }}</li>
+    {%  endfor %}
+</ol>
+{% endblock %}

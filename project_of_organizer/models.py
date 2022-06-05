@@ -7,18 +7,12 @@ class Family(models.Model):
     description = models.TextField()
     family_code = models.CharField(unique=True, max_length=8)
 
-    @property
-    def name(self):
-        return "{}".format(self.name)
-
-    def __str__(self):
-        return self.name
-
 
 class UserInf(models.Model):
     user_id = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     initial = models.CharField(max_length=1)
     color = models.CharField(max_length=32)
+    family = models.ForeignKey(Family, on_delete=models.CASCADE, null=True)
 
 
 class Categories(models.Model):
@@ -34,14 +28,11 @@ class Activities(models.Model):
 
 class Plans(models.Model):
     activity = models.ForeignKey(Activities, on_delete=models.CASCADE)
-    user = models.IntegerField()
-    day = models.DateTimeField()
-    duration = models.TimeField()
-
-
-class UserFamily(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    family = models.ForeignKey(Family, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    family = models.ForeignKey(Family, on_delete=models.CASCADE, null=True)
+    day = models.DateField()
+    start = models.TimeField(default="12:00")
+    finish = models.TimeField(default='12:15')
 
 
 class ItemForPlan(models.Model):

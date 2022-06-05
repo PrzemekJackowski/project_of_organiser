@@ -51,18 +51,16 @@
                             <a class="nav-link" href="/create_plan/">
                                 <span>Create plan</span>
                             </a>
+                        </li><li class="nav-item">
+                            <a class="nav-link" href="/plans/">
+                                <span>Show plans</span>
+                            </a>
                         </li>
                 </ul></div>
 {% block content %}
 {% endblock %}
 </body>
 <footer>
-    <p>You are member of:</p>
-<ul>
-    {%  for added_family in added_families %}
-    <li>{{ added_family.family.family_name }}</li>
-    {% endfor %}
-</ul>
     <p>You are using an application, created by Przemysław Jackowski.</p>
 </footer>
 </html>
