@@ -4,8 +4,9 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import UserForm, LogInForm, FamilyForm, AddToFamilyForm, CategoryForm, ActivityForm, PlanForm
-from .models import UserInf, Family, Categories, Activities, Plans, ItemForPlan, InfoAboutPlan
+from .forms import UserForm, LogInForm, FamilyForm, AddToFamilyForm, CategoryForm, ActivityForm, \
+    PlanForm, EventForm, JoinEventForm
+from .models import UserInf, Family, Categories, Activities, Plans, Events, UserEvent
 
 
 class CreateUserView(View):
@@ -138,7 +139,7 @@ class AddActivityView(LoginRequiredMixin, View):
         form = ActivityForm(request.POST)
         if form.is_valid():
             activity_name = form.cleaned_data['activity_name']
-            category = Categories.objects.get(id=form.cleaned_data['category'])
+            category = form.cleaned_data['category']
             description = form.cleaned_data['description']
             Activities.objects.create(activity_name=activity_name, category=category, description=description)
             return HttpResponse(f'You have been created activity {activity_name}')
@@ -160,20 +161,13 @@ class AddPlanView(LoginRequiredMixin, View):
         form = PlanForm(request.POST)
         if form.is_valid():
             user = request.user
-            activity = Activities.objects.get(id=form.cleaned_data['activity'])
+            activity = form.cleaned_data['activity']
             userinf = UserInf.objects.get(user_id=user.id)
             family = userinf.family
             day = form.cleaned_data['day']
             start = form.cleaned_data['start']
             finish = form.cleaned_data['finish']
-            plan = Plans.objects.create(activity=activity, user=user, family=family,
-                                        day=day, start=start, finish=finish)
-            item = form.cleaned_data['item']
-            if item:
-                ItemForPlan.objects.create(user=user, plan=plan, item=item)
-            info = form.cleaned_data['info']
-            if info:
-                InfoAboutPlan.objects.create(user=user, plan=plan, info=info)
+            Plans.objects.create(activity=activity, user=user, family=family, day=day, start=start, finish=finish)
             return HttpResponse(f'Plan has been added')
         return render(request, "create_plan.html", {"form": form})
 
@@ -184,4 +178,50 @@ class PlansListView(LoginRequiredMixin, View):
         userinf = UserInf.objects.get(user_id=user.id)
         family = userinf.family
         plans = Plans.objects.filter(family=family)
-        return render(request, "plans_list.html", {"plans": plans, "family": family, "user": user})
+        events = UserEvent.objects.filter(user=user)
+        return render(request, "plans_list.html", {"plans": plans, "family": family, "user": user, "events": events})
+
+
+class AddEventView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = EventForm()
+        return render(request, "create_event.html", {"form": form})
+
+    def post(self, request):
+        form = EventForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            userinf = UserInf.objects.get(user_id=user.id)
+            family = userinf.family
+            activity = form.cleaned_data['activity']
+            day = form.cleaned_data['day']
+            start = form.cleaned_data['start']
+            finish = form.cleaned_data['finish']
+            Events.objects.create(activity=activity, family=family, day=day, start=start, finish=finish)
+            return HttpResponse(f'Event has been created')
+        return render(request, "create_event.html", {"form": form})
+
+
+class EventListView(LoginRequiredMixin, View):
+    def get(self, request):
+        user = request.user
+        userinf = UserInf.objects.get(user_id=user.id)
+        family = userinf.family
+        events = Events.objects.filter(family=family)
+        return render(request, "events.html", {"events": events, 'family': family})
+
+
+class JoinEventView(LoginRequiredMixin, View):
+    def get(self, request, event_id):
+        form = JoinEventForm()
+        return render(request, "join_event.html", {"form": form})
+
+    def post(self, request, event_id):
+        form = JoinEventForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            event = Events.objects.get(id=event_id)
+            extra_info = form.cleaned_data['extra_info']
+            UserEvent.objects.create(user=user, event=event, extra_info=extra_info)
+            return HttpResponse("You have joined to event.")
+        return render(request, "join_event.html", {"form": form})

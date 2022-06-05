@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.urls import path
 
-from project_of_organizer.views import CreateUserView, LogInView, LogOutView, CreateFamilyView, FamiliesListView, AddToFamilyView, AddCategoryView, CategoriesListView, AddActivityView, ActivitiesListView, AddPlanView, PlansListView
+from project_of_organizer.views import CreateUserView, LogInView, LogOutView, CreateFamilyView, FamiliesListView, \
+    AddToFamilyView, AddCategoryView, CategoriesListView, AddActivityView, ActivitiesListView, AddPlanView, \
+    PlansListView, AddEventView, EventListView, JoinEventView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -17,4 +19,7 @@ urlpatterns = [
     path('activities/', ActivitiesListView.as_view(), name="activities"),
     path('create_plan/', AddPlanView.as_view(), name="create_plan"),
     path('plans/', PlansListView.as_view(), name='plans'),
+    path('create_event/', AddEventView.as_view(), name='create_event'),
+    path('events/', EventListView.as_view(), name='events'),
+    path('join_event/<int:event_id>', JoinEventView.as_view(), name='join_event')
 ]

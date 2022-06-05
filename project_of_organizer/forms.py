@@ -59,23 +59,24 @@ class CategoryForm(forms.Form):
 
 
 class ActivityForm(forms.Form):
-    categories = Categories.objects.all()
-    CATEGORIES = []
-    for category in categories:
-        CATEGORIES.append((category.id, category.category_name))
     activity_name = forms.CharField(label="Activity's name")
-    category = forms.ChoiceField(choices=CATEGORIES)
+    category = forms.ModelChoiceField(queryset=Categories.objects)
     description = forms.CharField(label="Description")
 
 
 class PlanForm(forms.Form):
-    activities = Activities.objects.all()
-    ACTIVITIES = []
-    for activity in activities:
-        ACTIVITIES.append((activity.id, activity.activity_name))
-    activity = forms.ChoiceField(choices=ACTIVITIES)
+    activity = forms.ModelChoiceField(queryset=Activities.objects)
     day = forms.DateField(label="Start of activity", widget=DatePickerInput)
     start = forms.TimeField(label="Start of activity", widget=TimePickerInput)
     finish = forms.TimeField(label="Finish of activity", widget=TimePickerInput)
-    item = forms.CharField(label="Item needed for that", required=False)
-    info = forms.CharField(label="Extra info about", required=False)
+
+
+class EventForm(forms.Form):
+    activity = forms.ModelChoiceField(queryset=Activities.objects)
+    day = forms.DateField(label="Start of event", widget=DatePickerInput)
+    start = forms.TimeField(label="Start of event", widget=TimePickerInput)
+    finish = forms.TimeField(label="Finish of event", widget=TimePickerInput)
+
+
+class JoinEventForm(forms.Form):
+    extra_info = forms.CharField(label="Extra info about participation")

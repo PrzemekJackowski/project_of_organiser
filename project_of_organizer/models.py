@@ -19,11 +19,25 @@ class Categories(models.Model):
     category_name = models.CharField(unique=True, max_length=64, default="Category's name")
     description = models.TextField()
 
+    @property
+    def name(self):
+        return "{}".format(self.category_name)
+
+    def __str__(self):
+        return self.name
+
 
 class Activities(models.Model):
     activity_name = models.CharField(unique=True, max_length=64, default="Activity's name")
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     description = models.TextField()
+
+    @property
+    def name(self):
+        return "{}".format(self.activity_name)
+
+    def __str__(self):
+        return self.name
 
 
 class Plans(models.Model):
@@ -35,13 +49,15 @@ class Plans(models.Model):
     finish = models.TimeField(default='12:15')
 
 
-class ItemForPlan(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    plan = models.ForeignKey(Plans, on_delete=models.CASCADE)
-    item = models.TextField(null=True)
+class Events(models.Model):
+    activity = models.ForeignKey(Activities, on_delete=models.CASCADE)
+    family = models.ForeignKey(Family, on_delete=models.CASCADE, null=True)
+    day = models.DateField()
+    start = models.TimeField(default="12:00")
+    finish = models.TimeField(default='12:15')
 
 
-class InfoAboutPlan(models.Model):
+class UserEvent(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    plan = models.ForeignKey(Plans, on_delete=models.CASCADE)
-    info = models.TextField(null=True)
+    event = models.ForeignKey(Events, on_delete=models.CASCADE)
+    extra_info = models.TextField(null=True)

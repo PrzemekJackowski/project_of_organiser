@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Plans in {{ family.family_name }} for {{ user.username }}</h2>
+<h2>Plans in {{ family.family_name }} with {{ user.username }}</h2>
     <ol>
 {% for plan in plans %}
-    <li>{{ plan.activity.activity_name }}, {{ plan.day }}: {{ plan.start }} - {{ plan.finish }}</li>
+    <li>{{ plan.user.username }}: {{ plan.activity.activity_name }}, {{ plan.day }}: {{ plan.start }} - {{ plan.finish }}</li>
     {%  endfor %}
 </ol>
+    <h2>Events, where {{ user.username }} is participating</h2>
+    <ol>
+    {% for event in events %}
+    <li>{{ event.event.activity.activity_name }}, {{ event.event.day }}: {{ event.event.start }} - {{ event.event.finish }}</li>
+    {%  endfor %}
+    </ol>
 {% endblock %}

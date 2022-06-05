@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Events for {{ family.family_name }}</h2>
+    <ol>
+    {% for event in events %}
+    <li>{{ event.activity.activity_name }}, {{ event.day }}: {{ event.start }} - {{ event.finish }} <a href="/join_event/{{ event.id }}">Join event</a></li>
+    {%  endfor %}
+    </ol>
+{% endblock %}
