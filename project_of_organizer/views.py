@@ -161,11 +161,13 @@ class AddPlanView(LoginRequiredMixin, View):
         if form.is_valid():
             user = request.user
             activity = Activities.objects.get(id=form.cleaned_data['activity'])
+            userinf = UserInf.objects.get(user_id=user.id)
+            family = userinf.family
             day = form.cleaned_data['day']
             start = form.cleaned_data['start']
             finish = form.cleaned_data['finish']
-            plan = Plans.objects.create(activity=activity, user=user, day=day, start=start, finish=finish)
-            Plans.refresh_from_db()
+            plan = Plans.objects.create(activity=activity, user=user, family=family,
+                                        day=day, start=start, finish=finish)
             item = form.cleaned_data['item']
             if item:
                 ItemForPlan.objects.create(user=user, plan=plan, item=item)
@@ -176,7 +178,7 @@ class AddPlanView(LoginRequiredMixin, View):
         return render(request, "create_plan.html", {"form": form})
 
 
-class PlansListView(View):
+class PlansListView(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
         userinf = UserInf.objects.get(user_id=user.id)
