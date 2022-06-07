@@ -9,6 +9,19 @@ from .forms import UserForm, LogInForm, FamilyForm, AddToFamilyForm, CategoryFor
 from .models import UserInf, Family, Categories, Activities, Plans, Events, UserEvent
 
 
+class WelcomeView(View):
+    def get(self, request):
+        messages = [
+            'Welcome in Self-Made Organizer APP!',
+            'You can use that application to create plans or plan events for family.',
+
+            'For enter some part of application, you have to be logged.',
+            'Please, sign up and start using that application!',
+
+            'Have a nice day!']
+        return render(request, "welcome.html", {"messages": messages})
+
+
 class CreateUserView(View):
     def get(self, request):
         form = UserForm()
@@ -23,11 +36,19 @@ class CreateUserView(View):
             email = form.cleaned_data['email']
             color = form.cleaned_data['color']
             initial = username[0]
-            if password == password2:
-                user = User.objects.create_user(username, email, password)
-                UserInf.objects.create(user_id=user, color=color, initial=initial)
-                return HttpResponse(f'User {username} has been created.')
-            return HttpResponse("Passwords are not the same.")
+            users = User.objects.all()
+            existing = False
+            for us in users:
+                if us.username == username:
+                    existing = True
+            if existing:
+                return HttpResponse('User with that username is just existing.')
+            else:
+                if password == password2:
+                    user = User.objects.create_user(username, email, password)
+                    UserInf.objects.create(user_id=user, color=color, initial=initial)
+                    return HttpResponse(f'User {username} has been created.')
+                return HttpResponse("Passwords are not the same.")
         return render(request, "create_user.html", {"form": form})
 
 
@@ -47,7 +68,7 @@ class LogInView(View):
                     return redirect(next_parameter)
                 return HttpResponseRedirect('/')
             else:
-                return HttpResponse('Incorrect login or password')
+                return HttpResponse('Incorrect login or password.')
         return render(request, "login.html", {'form': form})
 
 
@@ -81,7 +102,7 @@ class CreateFamilyView(LoginRequiredMixin, View):
                 elif families < 100000:
                     family_code = family_name[:3] + str(families)
                 Family.objects.create(family_name=family_name, description=description, family_code=family_code)
-                return HttpResponse(f'Family {family_name} has been created.Code of this family is {family_code}')
+                return HttpResponse(f'Family {family_name} has been created.Code of this family is {family_code}.')
             return HttpResponse('Family with that name is just existed.')
         return render(request, "create_family.html", {"form": form})
 
@@ -103,9 +124,11 @@ class AddToFamilyView(LoginRequiredMixin, View):
             family = Family.objects.get(family_code=form.cleaned_data['family_code'])
             user = request.user
             userinf = UserInf.objects.get(user_id=user.id)
-            userinf.family = family
-            userinf.save()
-            return HttpResponse(f'You have been added to family {family.family_name}')
+            if not userinf.family:
+                userinf.family = family
+                userinf.save()
+                return HttpResponse(f'You have been added to family {family.family_name}.')
+            return HttpResponse(f'You have been already joined to family {userinf.family.family_name}.')
         return render(request, "add_to_family.html", {"form": form})
 
 
@@ -119,8 +142,11 @@ class AddCategoryView(LoginRequiredMixin, View):
         if form.is_valid():
             category_name = form.cleaned_data['category_name']
             description = form.cleaned_data['description']
-            Categories.objects.create(category_name=category_name, description=description)
-            return HttpResponse(f'You have been created category {category_name}')
+            category = Categories.objects.get(category_name=category_name)
+            if not category:
+                Categories.objects.create(category_name=category_name, description=description)
+                return HttpResponse(f'You have been created category {category_name}.')
+            return HttpResponse(f'Category with name {category_name} is just existing.')
         return render(request, "create_category.html", {"form": form})
 
 
@@ -141,8 +167,11 @@ class AddActivityView(LoginRequiredMixin, View):
             activity_name = form.cleaned_data['activity_name']
             category = form.cleaned_data['category']
             description = form.cleaned_data['description']
-            Activities.objects.create(activity_name=activity_name, category=category, description=description)
-            return HttpResponse(f'You have been created activity {activity_name}')
+            activity = Activities.objects.get(activity_name=activity_name)
+            if not activity:
+                Activities.objects.create(activity_name=activity_name, category=category, description=description)
+                return HttpResponse(f'You have been created activity {activity_name}.')
+            return HttpResponse(f'Activity with name {activity_name} is just existing.')
         return render(request, "create_activity.html", {"form": form})
 
 
@@ -167,8 +196,19 @@ class AddPlanView(LoginRequiredMixin, View):
             day = form.cleaned_data['day']
             start = form.cleaned_data['start']
             finish = form.cleaned_data['finish']
-            Plans.objects.create(activity=activity, user=user, family=family, day=day, start=start, finish=finish)
-            return HttpResponse(f'Plan has been added')
+            extra_info = form.cleaned_data['extra_info']
+            plans = Plans.objects.filter(user=user)
+            planned = False
+            for plan in plans:
+                if plan.day == day and ((plan.start >= start and plan.finish <= finish)
+                                        or (plan.start <= start and plan.finish >= finish)):
+                    planned = True
+            if planned:
+                return HttpResponse('You have planned something else on that time.')
+            else:
+                Plans.objects.create(activity=activity, user=user, family=family,
+                                     day=day, start=start, finish=finish, extra_info=extra_info)
+                return HttpResponse('Plan has been added.')
         return render(request, "create_plan.html", {"form": form})
 
 
@@ -212,7 +252,7 @@ class EventListView(LoginRequiredMixin, View):
 
 
 class JoinEventView(LoginRequiredMixin, View):
-    def get(self, request, event_id):
+    def get(self, request):
         form = JoinEventForm()
         return render(request, "join_event.html", {"form": form})
 
@@ -222,19 +262,14 @@ class JoinEventView(LoginRequiredMixin, View):
             user = request.user
             event = Events.objects.get(id=event_id)
             extra_info = form.cleaned_data['extra_info']
-            UserEvent.objects.create(user=user, event=event, extra_info=extra_info)
-            return HttpResponse("You have joined to event.")
+            userevents = UserEvent.objects.all()
+            joined = False
+            for userevent in userevents:
+                if userevent.user == user and userevent.event == event:
+                    joined = True
+            if joined:
+                return HttpResponse("You have been already joined to that event.")
+            else:
+                UserEvent.objects.create(user=user, event=event, extra_info=extra_info)
+                return HttpResponse("You have joined to event.")
         return render(request, "join_event.html", {"form": form})
-
-
-class WelcomeView(View):
-    def get(self, request):
-        messages = [
-            'Welcome in Self-Made Organizer APP!',
-            'You can use that application to create plans or plan events for family.',
-            
-            'For enter some part of application, you have to be logged.',
-            'Please, sign up and start using that application!',
-            
-            'Have a nice day!']
-        return render(request, "welcome.html", {"messages": messages})

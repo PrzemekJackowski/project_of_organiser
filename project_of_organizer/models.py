@@ -47,6 +47,7 @@ class Plans(models.Model):
     day = models.DateField()
     start = models.TimeField(default="12:00")
     finish = models.TimeField(default='12:15')
+    extra_info = models.TextField(null=True)
 
 
 class Events(models.Model):

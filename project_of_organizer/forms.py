@@ -69,6 +69,7 @@ class PlanForm(forms.Form):
     day = forms.DateField(label="Start of activity", widget=DatePickerInput)
     start = forms.TimeField(label="Start of activity", widget=TimePickerInput)
     finish = forms.TimeField(label="Finish of activity", widget=TimePickerInput)
+    extra_info = forms.CharField(label='Extra info', widget=forms.Textarea)
 
 
 class EventForm(forms.Form):
