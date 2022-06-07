@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.urls import path
 
-from project_of_organizer.views import CreateUserView, LogInView, LogOutView, CreateFamilyView, FamiliesListView, \
-    AddToFamilyView, AddCategoryView, CategoriesListView, AddActivityView, ActivitiesListView, AddPlanView, \
-    PlansListView, AddEventView, EventListView, JoinEventView
+from project_of_organizer.views import WelcomeView, CreateUserView, LogInView, LogOutView, CreateFamilyView, \
+    FamiliesListView, AddToFamilyView, AddCategoryView, CategoriesListView, AddActivityView, ActivitiesListView, \
+    AddPlanView, PlansListView, AddEventView, EventListView, JoinEventView
 
 urlpatterns = [
+    path('', WelcomeView.as_view(), name='welcome'),
     path('admin/', admin.site.urls),
     path('sign_in/', CreateUserView.as_view()),
     path('login/', LogInView.as_view(), name='login'),

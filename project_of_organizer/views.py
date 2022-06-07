@@ -225,3 +225,16 @@ class JoinEventView(LoginRequiredMixin, View):
             UserEvent.objects.create(user=user, event=event, extra_info=extra_info)
             return HttpResponse("You have joined to event.")
         return render(request, "join_event.html", {"form": form})
+
+
+class WelcomeView(View):
+    def get(self, request):
+        messages = [
+            'Welcome in Self-Made Organizer APP!',
+            'You can use that application to create plans or plan events for family.',
+            
+            'For enter some part of application, you have to be logged.',
+            'Please, sign up and start using that application!',
+            
+            'Have a nice day!']
+        return render(request, "welcome.html", {"messages": messages})
