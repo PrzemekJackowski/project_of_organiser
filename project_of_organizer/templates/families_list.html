@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
-{% block content %}
-<h2>Families</h2>
-    <ol>
-{% for family in families %}
-    <li>{{ family.family_name }}, {{ family.family_code }}</li>
-    {%  endfor %}
-</ol>
-{% endblock %}

@@ -10,6 +10,9 @@ from .models import UserInf, Family, Categories, Activities, Plans, Events, User
 
 
 class WelcomeView(View):
+    """
+    View to welcome user. It does not have any other special option.
+    """
     def get(self, request):
         messages = [
             'Welcome in Self-Made Organizer APP!',
@@ -23,6 +26,9 @@ class WelcomeView(View):
 
 
 class CreateUserView(View):
+    """
+    View prepared to create User and related object UserInf. Extra info about user exist for join user to family.
+    """
     def get(self, request):
         form = UserForm()
         return render(request, "create_user.html", {"form": form})
@@ -53,6 +59,9 @@ class CreateUserView(View):
 
 
 class LogInView(View):
+    """
+    View created for log in user. This view authenticating and, after that login user.
+    """
     def get(self, request):
         form = LogInForm()
         return render(request, "login.html", {"form": form})
@@ -73,12 +82,19 @@ class LogInView(View):
 
 
 class LogOutView(LoginRequiredMixin, View):
+    """
+    View created to log out user.
+    """
     def get(self, request):
         logout(request)
         return HttpResponseRedirect('/')
 
 
 class CreateFamilyView(LoginRequiredMixin, View):
+    """
+    View prepared to create object Family. Object is related with UserInf in relation One to Many. View creating
+    individual family code, using when user want to become a member of family.
+    """
     def get(self, request):
         form = FamilyForm()
         return render(request, "create_family.html", {"form": form})
@@ -102,18 +118,16 @@ class CreateFamilyView(LoginRequiredMixin, View):
                 elif families < 100000:
                     family_code = family_name[:3] + str(families)
                 Family.objects.create(family_name=family_name, description=description, family_code=family_code)
-                return HttpResponse(f'Family {family_name} has been created.Code of this family is {family_code}.')
+                return HttpResponse(f'Family {family_name} has been created. Code of this family is {family_code}.')
             return HttpResponse('Family with that name is just existed.')
         return render(request, "create_family.html", {"form": form})
 
 
-class FamiliesListView(View):
-    def get(self, request):
-        families = Family.objects.all()
-        return render(request, "families_list.html", {"families": families})
-
-
 class AddToFamilyView(LoginRequiredMixin, View):
+    """
+    View prepared for users who want to join to family. Using individual family code, view gets user id and update
+    UserInf.family field with Family object.
+    """
     def get(self, request):
         form = AddToFamilyForm()
         return render(request, "add_to_family.html", {"form": form})
@@ -133,6 +147,9 @@ class AddToFamilyView(LoginRequiredMixin, View):
 
 
 class AddCategoryView(LoginRequiredMixin, View):
+    """
+    View prepared to create a category of activities. Main function is archiving activities with the same information.
+    """
     def get(self, request):
         form = CategoryForm()
         return render(request, "create_category.html", {"form": form})
@@ -150,13 +167,10 @@ class AddCategoryView(LoginRequiredMixin, View):
         return render(request, "create_category.html", {"form": form})
 
 
-class CategoriesListView(View):
-    def get(self, request):
-        categories = Categories.objects.all()
-        return render(request, "categories_list.html", {"categories": categories})
-
-
 class AddActivityView(LoginRequiredMixin, View):
+    """
+    View prepared to create activities, which user can later use to create individual plans.
+    """
     def get(self, request):
         form = ActivityForm()
         return render(request, "create_activity.html", {"form": form})
@@ -175,13 +189,11 @@ class AddActivityView(LoginRequiredMixin, View):
         return render(request, "create_activity.html", {"form": form})
 
 
-class ActivitiesListView(View):
-    def get(self, request):
-        activities = Activities.objects.all()
-        return render(request, "activities_list.html", {"activities": activities})
-
-
 class AddPlanView(LoginRequiredMixin, View):
+    """
+    View prepared for users who want to create plans. Creates object Plans, connected with UserInf object,
+    Family object and Activities object.
+    """
     def get(self, request):
         form = PlanForm()
         return render(request, "create_plan.html", {"form": form})
@@ -213,6 +225,9 @@ class AddPlanView(LoginRequiredMixin, View):
 
 
 class PlansListView(LoginRequiredMixin, View):
+    """
+    View created to show plans and events for logged user.
+    """
     def get(self, request):
         user = request.user
         userinf = UserInf.objects.get(user_id=user.id)
@@ -223,6 +238,9 @@ class PlansListView(LoginRequiredMixin, View):
 
 
 class AddEventView(LoginRequiredMixin, View):
+    """
+    View prepared to create Events - Plans for more than one User. Creating Event is not similar to join to that event!
+    """
     def get(self, request):
         form = EventForm()
         return render(request, "create_event.html", {"form": form})
@@ -243,6 +261,9 @@ class AddEventView(LoginRequiredMixin, View):
 
 
 class EventListView(LoginRequiredMixin, View):
+    """
+    View created to list events in chosen family. There user can come to view to join chosen event.
+    """
     def get(self, request):
         user = request.user
         userinf = UserInf.objects.get(user_id=user.id)
@@ -252,6 +273,9 @@ class EventListView(LoginRequiredMixin, View):
 
 
 class JoinEventView(LoginRequiredMixin, View):
+    """
+    View prepared to join chosen event by logged user.
+    """
     def get(self, request):
         form = JoinEventForm()
         return render(request, "join_event.html", {"form": form})
