@@ -1,15 +1,55 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2>Plans in {{ family.family_name }} with {{ user.username }}</h2>
-    <ol>
-{% for plan in plans %}
-    <li>{{ plan.user.username }}: {{ plan.activity.activity_name }}, {{ plan.day }}: {{ plan.start }} - {{ plan.finish }}. {{ plan.extra_info }}</li>
+<table border="1">
+<thead>
+    <tr>
+        <th>In.</th>
+        <th>User</th>
+        <th>Activity</th>
+        <th>Date</th>
+        <th>Start time</th>
+        <th>Finish time</th>
+        <th>Extra info</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for plan in plans %}
+        <tr>
+            <td bgcolor="{{ plan.color }}">{{ plan.initial }}</td>
+            <td>{{ plan.user.username }}</td>
+            <td>{{ plan.activity.activity_name }}</td>
+            <td>{{ plan.day }}</td>
+            <td>{{ plan.start }}</td>
+            <td>{{ plan.finish }}</td>
+            <td>{{ plan.extra_info }}</td>
+        </tr>
     {%  endfor %}
-</ol>
+    </tbody>
+</table>
     <h2>Events, where {{ user.username }} is participating</h2>
-    <ol>
+    <table border="1">
+<thead>
+    <tr>
+        <th>In.</th>
+        <th>Activity</th>
+        <th>Date</th>
+        <th>Start time</th>
+        <th>Finish time</th>
+        <th>Extra info</th>
+    </tr>
+    </thead>
+    <tbody>
     {% for event in events %}
-    <li>{{ event.event.activity.activity_name }}, {{ event.event.day }}: {{ event.event.start }} - {{ event.event.finish }}. {{ event.extra_info }}</li>
+        <tr>
+        <td bgcolor="{{ userinf.color }}">{{ userinf.initial }}</td>
+        <td>{{ event.event.activity.activity_name }}</td>
+        <td>{{ event.event.day }}</td>
+        <td>{{ event.event.start }}</td>
+        <td>{{ event.event.finish }}</td>
+        <td>{{ event.extra_info }}</td>
+        </tr>
     {%  endfor %}
-    </ol>
+    </tbody>
+    </tbody>
 {% endblock %}

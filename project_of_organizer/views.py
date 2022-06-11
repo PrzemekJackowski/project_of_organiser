@@ -209,6 +209,8 @@ class AddPlanView(LoginRequiredMixin, View):
             start = form.cleaned_data['start']
             finish = form.cleaned_data['finish']
             extra_info = form.cleaned_data['extra_info']
+            color = userinf.color
+            initial = userinf.initial
             plans = Plans.objects.filter(user=user)
             planned = False
             for plan in plans:
@@ -219,7 +221,8 @@ class AddPlanView(LoginRequiredMixin, View):
                 return HttpResponse('You have planned something else on that time.')
             else:
                 Plans.objects.create(activity=activity, user=user, family=family,
-                                     day=day, start=start, finish=finish, extra_info=extra_info)
+                                     day=day, start=start, finish=finish,
+                                     extra_info=extra_info, color=color, initial=initial)
                 return HttpResponse('Plan has been added.')
         return render(request, "create_plan.html", {"form": form})
 
@@ -234,7 +237,8 @@ class PlansListView(LoginRequiredMixin, View):
         family = userinf.family
         plans = Plans.objects.filter(family=family)
         events = UserEvent.objects.filter(user=user)
-        return render(request, "plans_list.html", {"plans": plans, "family": family, "user": user, "events": events})
+        return render(request, "plans_list.html", {"plans": plans, "family": family, "user": user,
+                                                   "events": events, "userinf": userinf})
 
 
 class AddEventView(LoginRequiredMixin, View):
@@ -276,7 +280,7 @@ class JoinEventView(LoginRequiredMixin, View):
     """
     View prepared to join chosen event by logged user.
     """
-    def get(self, request):
+    def get(self, request, event_id):
         form = JoinEventForm()
         return render(request, "join_event.html", {"form": form})
 

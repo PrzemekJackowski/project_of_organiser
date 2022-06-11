@@ -48,6 +48,8 @@ class Plans(models.Model):
     start = models.TimeField(default="12:00")
     finish = models.TimeField(default='12:15')
     extra_info = models.TextField(null=True)
+    color = models.CharField(max_length=16, null=True)
+    initial = models.CharField(max_length=1, null=True)
 
 
 class Events(models.Model):
