@@ -159,11 +159,8 @@ class AddCategoryView(LoginRequiredMixin, View):
         if form.is_valid():
             category_name = form.cleaned_data['category_name']
             description = form.cleaned_data['description']
-            category = Categories.objects.get(category_name=category_name)
-            if not category:
-                Categories.objects.create(category_name=category_name, description=description)
-                return HttpResponse(f'You have been created category {category_name}.')
-            return HttpResponse(f'Category with name {category_name} is just existing.')
+            Categories.objects.create(category_name=category_name, description=description)
+            return HttpResponse(f'You have been created category {category_name}.')
         return render(request, "create_category.html", {"form": form})
 
 
@@ -181,11 +178,8 @@ class AddActivityView(LoginRequiredMixin, View):
             activity_name = form.cleaned_data['activity_name']
             category = form.cleaned_data['category']
             description = form.cleaned_data['description']
-            activity = Activities.objects.get(activity_name=activity_name)
-            if not activity:
-                Activities.objects.create(activity_name=activity_name, category=category, description=description)
-                return HttpResponse(f'You have been created activity {activity_name}.')
-            return HttpResponse(f'Activity with name {activity_name} is just existing.')
+            Activities.objects.create(activity_name=activity_name, category=category, description=description)
+            return HttpResponse(f'You have been created activity {activity_name}.')
         return render(request, "create_activity.html", {"form": form})
 
 
