@@ -24,8 +24,11 @@ class ModelsTestCase(TestCase):
         user = self.user
         userinf = self.userinf
         family = self.family
+        families = Family.objects.all()
         self.assertEqual(userinf.user_id, user)
         self.assertEqual(userinf.family, family)
+        self.assertEqual(len(families), (int(family.family_code[7]) + 1))
+        self.assertEqual(userinf.initial, user.username[0])
 
     def test_plan(self):
         user = self.user
